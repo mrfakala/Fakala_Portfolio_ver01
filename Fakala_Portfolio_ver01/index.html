@@ -168,11 +168,22 @@
             display: none;
             opacity: 0;
             transition: opacity 0.6s ease;
+            /* YENİ EKLENENLER: */
+            background-color: var(--bg-color); /* Arka plan rengi */
+            width: 100%; /* Tam genişlik */
+            position: absolute; /* Üst üste binmeyi yönetmek için */
+            top: 0;
+            left: 0;
+            padding-bottom: 100px; /* Alt kısım kesilmesin */
+            min-height: 100vh;
+            z-index: 1;
         }
-
+        
         .page-section.active { 
             display: block; 
             opacity: 1;
+            position: relative; /* Aktif olan akışa girsin */
+            z-index: 10;
         }
         
         #home.active {
@@ -917,36 +928,52 @@
         }
 
         function goTo(id) {
+            // 1. Tüm sayfaları seç
+            const allSections = document.querySelectorAll('.page-section');
+            const target = document.getElementById(id);
             const currentActive = document.querySelector('.page-section.active');
-            if(currentActive) {
+
+            // Eğer zaten açık olan sayfaya tıklandıysa hiçbir şey yapma
+            if (currentActive && currentActive.id === id) {
+                toggleMenu(); // Sadece menüyü kapat
+                return;
+            }
+
+            // 2. Eğer açık bir sayfa varsa onu soldur (Fade Out)
+            if (currentActive) {
                 currentActive.style.opacity = '0';
+                
+                // Animasyon bitene kadar bekle (300ms)
                 setTimeout(() => {
-                    currentActive.classList.remove('active');
-                    
-                    const target = document.getElementById(id);
+                    // 3. GÜVENLİK TEMİZLİĞİ: Tüm sayfalardan 'active' sınıfını sil
+                    allSections.forEach(section => {
+                        section.classList.remove('active');
+                        section.style.opacity = '0';
+                    });
+
+                    // 4. Hedef sayfayı aç
                     if (target) {
                         target.classList.add('active');
+                        // Tarayıcının 'display: block' işlemini algılaması için minik gecikme
                         setTimeout(() => {
                             target.style.opacity = '1';
+                            window.scrollTo(0, 0); // Sayfayı en tepeye at
                         }, 50);
                     }
-                }, 300); 
+                }, 300);
             } else {
-                const target = document.getElementById(id);
-                target.classList.add('active');
-                setTimeout(() => target.style.opacity = '1', 50);
+                // İlk açılış veya hiç aktif sayfa yoksa direkt aç
+                if (target) {
+                    allSections.forEach(s => s.classList.remove('active')); // Temizlik
+                    target.classList.add('active');
+                    setTimeout(() => {
+                        target.style.opacity = '1';
+                        window.scrollTo(0, 0);
+                    }, 50);
+                }
             }
 
-            toggleMenu();
-            window.scrollTo(0, 0);
-        }
-
-        window.onload = function() {
-            const home = document.getElementById('home');
-            if(home) {
-                home.classList.add('active');
-                setTimeout(() => home.style.opacity = '1', 50);
-            }
+            toggleMenu(); // Menüyü kapat
         }
     </script>
 </body>
