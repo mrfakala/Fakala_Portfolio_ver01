@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAKALA | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- TEMEL AYARLAR --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-color: #0c0c0c;
+            --menu-bg: #111111;
+            --accent: #ffffff;
+            --text-color: #e6e6e6; 
+            --text-highlight: #ffffff; 
+            --box-color: #e5e5e5; 
+            --orange-brand: #ff6b00;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--accent);
+            font-family: 'Jost', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.7;
+            font-size: 17px;
+            font-weight: 300;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- HAMBURGER MENU --- */
+        .menu-toggle {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 2000;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .bar {
+            width: 35px;
+            height: 2px;
+            background-color: #fff;
+            transition: 0.4s;
+        }
+
+        .menu-toggle.open .bar:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+        .menu-toggle.open .bar:nth-child(2) { opacity: 0; }
+        .menu-toggle.open .bar:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+        /* --- SIDEBAR MENÜ --- */
+        aside {
+            position: fixed;
+            top: 0;
+            left: -350px;
+            width: 340px;
+            height: 100vh;
+            background: var(--menu-bg);
+            border-right: 1px solid #222;
+            padding: 90px 40px 40px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: left 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 1500;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.6);
+        }
+
+        aside.active { left: 0; }
+
+        .brand {
+            font-family: 'Jost', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .nav-links li { margin-bottom: 15px; }
+
+        .nav-links button {
+            background-color: var(--box-color);
+            color: #000;
+            border: none;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            padding: 14px 0;
+            border-radius: 4px;
+            transition: all 0.4s ease;
+        }
+
+        .nav-links button:hover, .nav-links button.active {
+            background-color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+        }
+
+        .submenu {
+            display: none;
+            margin-top: 8px;
+            border-left: 1px solid #333;
+            padding-left: 10px;
+        }
+        
+        .submenu button {
+            background: transparent;
+            color: #aaa;
+            text-transform: none;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.85rem;
+            border-bottom: none;
+            padding: 8px 0;
+            text-align: left;
+            padding-left: 15px;
+        }
+        .submenu button:hover {
+            background: transparent;
+            color: #fff;
+            transform: translateX(5px);
+            box-shadow: none;
+        }
+
+        .socials {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 20px;
+            opacity: 0.7;
+        }
+        
+        .socials svg {
+            width: 22px;
+            height: 22px;
+            fill: #fff;
+            transition: fill 0.3s, transform 0.3s;
+        }
+        .socials a:hover svg { transform: scale(1.2); fill: #fff; opacity: 1; }
+
+        /* --- ANA İÇERİK --- */
+        main {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .page-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .page-section.active { 
+            display: block; 
+            opacity: 1;
+        }
+        
+        #home.active {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HOMEPAGE DÜZENİ --- */
+        .hero-text-area {
+            flex: 0 0 auto;
+            padding: 120px 20px 60px 20px;
+            text-align: center;
+            background: #0c0c0c;
+        }
+
+        .hero-text-area h1 {
+            font-family: 'Jost', sans-serif;
+            font-size: 3.25rem; 
+            font-weight: 300;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: #fff;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .hero-text-area p {
+            font-family: 'Jost', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--text-color);
+        }
+
+        .hero-image-container {
+            flex: 1; 
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            background-color: var(--orange-brand); 
+        }
+
+        /* REVIZE 3: HOMEPAGE FOTOĞRAFI İÇİN ÖZEL STİL */
+        .homepage-analog {
+            max-width: 100%;
+            height: auto;
+            max-height: 65vh;
+            object-fit: contain;
+            /* Analog/Polaroid Efekti */
+            border: 15px solid #fff; 
+            border-bottom: 50px solid #fff; /* Alt kısmı geniş */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); 
+            /* Animasyon YOK, Dönme YOK */
+            transform: rotate(0deg);
+        }
+
+        /* --- GENEL CONTENT WRAPPER --- */
+        .content-wrapper {
+            padding: 140px 60px 80px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .content-wrapper h2 {
+            font-family: 'Jost', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            margin-bottom: 60px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        /* --- SPLIT LAYOUT --- */
+        .split-layout {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+        }
+
+        .text-column { flex: 1; }
+
+        .image-column {
+            flex: 0 0 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+        }
+
+        .image-column.sticky-image {
+            position: sticky;
+            top: 100px; 
+            height: fit-content;
+        }
+
+        .text-content p {
+            font-family: 'Jost', sans-serif;
+            margin-bottom: 30px;
+            font-size: 1.15rem; 
+            line-height: 1.8;
+            color: var(--text-color);
+            text-align: justify;
+            font-weight: 300;
+        }
+
+        .highlight {
+            color: #ffffff; 
+            font-weight: 500;
+        }
+
+        /* REVIZE 2: DİĞER SAYFALAR İÇİN ANALOG FOTOĞRAF STİLİ (Animasyonlu) */
+        .analog-photo {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border: 12px solid #fff;
+            border-bottom: 40px solid #fff;
+            box-shadow: 5px 15px 30px rgba(0,0,0,0.5);
+            filter: sepia(20%) contrast(110%) brightness(90%);
+            transition: transform 0.4s;
+        }
+        
+        .rotate-right { transform: rotate(2deg); }
+        .rotate-left { transform: rotate(-3deg); }
+
+        .analog-photo:hover {
+            transform: rotate(0deg) scale(1.02);
+            filter: sepia(0%) contrast(100%);
+            z-index: 10;
+        }
+
+        .linktree-container {
+            margin-top: 50px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column; /* Spotify'ı altına almak için */
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* --- VIDEO ARCHIVE & HIGHLIGHTS GRID --- */
+        .video-archive-section {
+            margin-top: 100px;
+            padding-top: 60px;
+            border-top: 1px solid #222;
+        }
+
+        .video-category-title {
+            font-family: 'Jost', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            text-align: center;
+            border-bottom: 1px dashed #333;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .video-center-wrapper {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .video-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .video-item {
+            background: #000;
+            padding: 5px;
+            border: 1px solid #333;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+        }
+
+        .video-item:hover {
+            transform: translateY(-5px);
+            border-color: #fff;
+        }
+
+        /* --- HIGHLIGHTS (MASONRY) GRID --- */
+        .highlights-grid {
+            column-count: 2; 
+            column-gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .highlight-item {
+            break-inside: avoid;
+            margin-bottom: 40px;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+        }
+
+        .highlight-item.yt-container {
+            background: #000;
+            padding: 10px;
+            border: 1px solid #333;
+            width: 100%;
+        }
+
+        .follow-me-btn {
+            display: inline-block;
+            margin-top: 80px;
+            padding: 20px 40px;
+            border: 1px solid var(--orange-brand);
+            color: var(--orange-brand);
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .follow-me-btn:hover {
+            background: var(--orange-brand);
+            color: #000;
+            transform: translateY(-5px);
+        }
+
+        /* --- STUDIO LIST STYLE --- */
+        .year-title {
+            font-size: 2rem;
+            color: var(--orange-brand);
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            display: inline-block;
+            font-weight: 400;
+        }
+
+        .track-item {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #bbb;
+        }
+
+        .track-item a {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px dotted #444;
+            transition: all 0.3s;
+        }
+
+        .track-item a:hover {
+            color: var(--orange-brand);
+            border-color: var(--orange-brand);
+        }
+
+        /* --- LIVE SOUND PAGE --- */
+        .live-sound-intro {
+            font-size: 1.3rem;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 50px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            font-style: italic;
+        }
+
+        .live-sound-list {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 2.2;
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+
+        .live-sound-list span {
+            display: inline-block;
+            margin: 0 8px;
+        }
+
+        .live-sound-list span::after {
+            content: "/";
+            margin-left: 16px;
+            color: var(--orange-brand);
+            font-weight: bold;
+        }
+
+        .live-sound-list span:last-child::after { content: ""; }
+
+        /* --- CONTACT STYLES --- */
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .contact-link {
+            font-size: 1.5rem;
+            color: #fff;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 5px;
+        }
+
+        .contact-link:hover {
+            color: var(--orange-brand);
+            border-bottom: 1px solid var(--orange-brand);
+        }
+
+        /* MOBİL UYUM */
+        @media (max-width: 950px) {
+            .split-layout { flex-direction: column; }
+            .image-column { flex: auto; width: 100%; margin-top: 40px; }
+            .analog-photo, .homepage-analog { width: 100%; max-width: 100%; transform: rotate(0); border-bottom: 12px solid #fff; }
+            .hero-text-area h1 { font-size: 2.5rem; }
+            .content-wrapper { padding: 100px 20px; }
+            .image-column.sticky-image { position: static; }
+            .highlights-grid { column-count: 1; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </button>
+
+    <aside id="sidebar">
+        <div class="brand">FAKALA</div>
+        
+        <ul class="nav-links">
+            <li><button onclick="goTo('home')">Homepage</button></li>
+            <li><button onclick="goTo('musician')">Fakala as a musician</button></li>
+            
+            <li>
+                <button onclick="toggleSubmenu('tech-submenu')">Fakala in music tech ▾</button>
+                <div class="submenu" id="tech-submenu">
+                    <button onclick="goTo('studio')">- In Studio</button>
+                    <button onclick="goTo('highlights')">- Highlights</button>
+                    <button onclick="goTo('livesound')">- Live Sound</button>
+                </div>
+            </li>
+            
+            <li><button onclick="goTo('instrumentalist')">Fakala as an instrumentalist</button></li>
+            <li><button onclick="goTo('composer')">Fakala as an Composer</button></li>
+            
+            <li>
+                <button onclick="toggleSubmenu('projects-submenu')">Fakala's Projects ▾</button>
+                <div class="submenu" id="projects-submenu">
+                    <button onclick="goTo('hikaye')">- The Hikaye Project</button>
+                    <button onclick="goTo('dogac')">- Doğaç Müzik</button>
+                </div>
+            </li>
+            
+            <li><button onclick="goTo('contact')">Contact</button></li>
+        </ul>
+
+        <div class="socials">
+            <a href="https://www.instagram.com/prodbyfakala/" target="_blank">
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@fakalakka/videos" target="_blank">
+                <svg viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/taylan-yıldırır-516801192/" target="_blank">
+                <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
+        </div>
+    </aside>
+
+    <main>
+        
+        <section id="home" class="page-section active">
+            <div class="hero-text-area">
+                <h1>WELCOME</h1>
+                <p>This is a portfolio of Fakala (Taylan Yıldırır)</p>
+            </div>
+            <div class="hero-image-container">
+                <img src="taylan.jpg" alt="Fakala Portrait" class="homepage-analog">
+            </div>
+        </section>
+
+        <section id="musician" class="page-section content-wrapper">
+            <h2>FAKALA AS A MUSICIAN</h2>
+            <div class="split-layout">
+                <div class="text-column">
+                    <div class="text-content">
+                        <p>
+                            In 2022, made his debut on digital music platforms with his work <span class="highlight">"Denge"</span>. This work strongly demonstrates Fakala's storytelling side. In 2022, he released an album called <span class="highlight">"Enteresantel"</span> which conveyed his music learning process and the confusing problems of a teenager. Released 2 singles titled "Yanımda Ol" and "AMA BEN SİKTİR ETMEK İSTEMİYORUMM!!".
+                        </p>
+                        <p>
+                            In 2023, released a single "Hayat Boktan". In 2024, released two singles "Tinnitus" and "Gözlerini Kapat ve Sus". <span class="highlight">"Tinnitus"</span> was listened to more than 20,000 times on Spotify within 2 months. On May 31, 2024, "En Güzel İlhamlar", the first piece from his album <span class="highlight">"Karanlık Sancıyı Aydınlatıyor"</span>, was pre released. The track entered the Spotify "Fresh Finds Türkiye" list at number one. The track from this album "Teşhis" has reached more than 40,000 listens on Spotify.
+                        </p>
+                        <p>
+                            Performed as Fakala. Some of them has videos on Youtube. After the Album <span class="highlight">"Karanlık Sancıyı Aydınlatıyor"</span> has released, 4 different internet magazines (Rotka, BBI, Müzik Ekspres, Beatsommelier) has published an article about “Fakala”. The song “En Güzel İlhamlar” from this album has stayed on the first place of <span class="highlight">“Fresh Finds Türkiye”</span> editorial list for a month. Directed and published 3 music videos as “Fakala”.
+                        </p>
+                    </div>
+                    <div class="linktree-container">
+                        <a href="https://linktr.ee/mrfakala" target="_blank" style="text-decoration: none; width: 100%; max-width: 400px;">
+                            <div style="width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f7f7f7; font-family: 'Jost', sans-serif; color: #000; transition: transform 0.3s;">
+                                <img src="https://linktr.ee/_gatsby/image/1bce54acc60e4cb2f3673570f49da84c/57ddbf3ea3b9dc83abfd9be1618fabc9/LT-Logo-64-x-64.avif?u=https%3A%2F%2Fapi.blog.production.linktr.ee%2Fwp-content%2Fuploads%2F2024%2F11%2FLT-Logo-64-x-64.png&a=w%3D128%26h%3D128%26fm%3Davif%26q%3D75&cd=3d2954f03e22e9067554bee06fc153d9" alt="Linktree" width="24" style="vertical-align: middle; margin-right: 10px;">
+                                <strong>mrfakala</strong>'s linktree
+                            </div>
+                        </a>
+                        <div style="width: 100%; max-width: 400px;">
+                            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/62?utm_source=generator" width="100%" height="202" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-column">
+                    <img src="fakala_as_a_musician.jpeg" alt="Fakala Analog" class="analog-photo rotate-right">
+                    <img src="fakala_as_a_musician_02.JPG" alt="Fakala Analog 2" class="analog-photo rotate-left" style="margin-top: -30px;">
+                </div>
+            </div>
+            <div class="video-archive-section">
+                <div class="video-center-wrapper"><span class="video-category-title">Music Videos</span></div>
+                <div class="video-grid">
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/UHEeRl5Fkyk?si=1uQbVfn3vZGq_6kU" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/2mJk3Jy1oHU?si=zR2cbamHKO4_cHbZ" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/Ok-YSXY_vTM?si=ZMH8-RdJiKMKb__0" frameborder="0" allowfullscreen></iframe></div>
+                </div>
+                <div style="height: 60px;"></div>
+                <div class="video-center-wrapper"><span class="video-category-title">Live Performances</span></div>
+                <div class="video-grid">
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/IeMibrUV7Ts?si=IUXTouzcm3YrO8Z9" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/5h2dXFjnvoc?si=Cp_5YO9NAozC9Evt" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/D76sXZ2FKjY?si=3zzItDKdTAFoJPZT" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/w4QjTMyjBM8?si=opDrIGm5yXki3kj2" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/d5DZXQvlQn8?si=OoxGdIYczL6Uv0sw" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/wIixEOZ_xWY?si=6yfEZWd6aeQS1oPC" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/7YjDXkwA1tc?si=hZKxgP-kD6KGkxd1" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/UMNeuqLcw5E?si=UtSzNOnMOxseaW0v" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/TIK1_6xi078?si=JwfUMURznxMvrkax" frameborder="0" allowfullscreen></iframe></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="highlights" class="page-section content-wrapper">
+            <h2>HIGHLIGHTS</h2>
+            <div class="highlights-grid">
+                
+                <div class="highlight-item yt-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/M7xa_vOvqR0?si=Wosxh8eoSzkR1aEM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="width:100%; max-width:100%;"></iframe>
+                </div>
+
+                <div class="highlight-item"><blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/C6iknOdAccC/" data-instgrm-version="14"></blockquote></div>
+                <div class="highlight-item"><blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DTTAc1rjdMb/" data-instgrm-version="14"></blockquote></div>
+                <div class="highlight-item"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/Cy0I3bPA4sb/" data-instgrm-version="14"></blockquote></div>
+                <div class="highlight-item"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DB9ZMG1OQwD/" data-instgrm-version="14"></blockquote></div>
+                <div class="highlight-item"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CgKWCn9LieP/" data-instgrm-version="14"></blockquote></div>
+                <div class="highlight-item"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C_5g4IFoNq9/" data-instgrm-version="14"></blockquote></div>
+                <div class="highlight-item"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8Eq6T6IYVz/" data-instgrm-version="14"></blockquote></div>
+
+            </div>
+            <div style="text-align: center; margin-bottom: 50px;">
+                <a href="https://www.instagram.com/prodbyfakala/" target="_blank" class="follow-me-btn">
+                    FOR MORE, FOLLOW ME ON INSTAGRAM
+                </a>
+            </div>
+        </section>
+
+        <section id="studio" class="page-section content-wrapper">
+            <h2>FAKALA IN STUDIO</h2>
+            <div class="split-layout">
+                <div class="text-column">
+                    <div class="studio-list">
+                        <div class="year-group"><h3 class="year-title">2025</h3>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/1TOKgLrtR90JuODeyRGIt1?si=02a3049f52174272" target="_blank">Emre Güneş - Yalan | Composing, Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://www.youtube.com/watch?v=ixgzt-IopVY&list=OLAK5uy_nGI2eXduzC5lcC-zePL3VWLlA19XGu_No" target="_blank">Emre Güneş - Yavaştan Sıyrıl | Composing, Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/4CjwuErkI0GbwN9WwX9VrE?si=9092ce1608f54d91" target="_blank">Emre Güneş - Her Şey Çok Sessiz | Composing, Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - Aklımda Kal | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Mert Ersoy - Geçmişte Bir Yerde Bıraktım | Composing, Producing, Recording, Mixing, Mastering (Has Not Released)</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Fuyki - Mutsuz İnsanlar Kenti | Composing, Producing, Mixing (Has Not Released)</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Çağrı Sinci - ??? | Beatmaking for 2 songs (Has Not Released)</a></div>
+                            <div class="track-item"><a href="#" target="_blank">IrmakCa - Bas İstifayı | Recording, Mixing, Mastering (Has Not Released)</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Koza - Hoşçakal | Composing, Producing, Recording, Mixing, Mastering (Has Not Released)</a></div>
+                        </div>
+                        <div class="year-group"><h3 class="year-title">2024</h3>
+                            <div class="track-item"><a href="#" target="_blank">Laki - Panzehir | Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/3vQaNGub0VOpXC6fB0JBQ7?si=-TS1YCMGSOWLtwE5PjxPPg" target="_blank">Emre Güneş - TUTUZAK | Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - Mizantropi | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">TAYZZ777 - Hayatın Mış Gibi | Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">IrmakCa - Derya | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">IrmakCa - Dolana Dolana | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/5quIEFDdv0dSs7tiAtQ7Av?si=d3d219a78889438a" target="_blank">Fakala - Tinnitus | Composing, Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/6bogtpORBoF1BX7Szvd87H?si=95d408181ce74ac3" target="_blank">Fakala - Gözlerini Kapat ve Sus | Composing, Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/45fqKG6l2Cb9wbaNv8jFAu?si=UfDKi_ALQciAm9-yUyovrw" target="_blank">Fakala - Karanlık Sancıyı Aydınlatıyor (Album) | Composing, Producing, Recording, Mixing</a></div>
+                        </div>
+                        <div class="year-group"><h3 class="year-title">2023</h3>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/4txzxioS9KodLQIQUc70UT?si=TA9M1St-R92JdDKGVEf89Q" target="_blank">Fakala - Hayat Boktan | Composing, Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Koza - BİZİM NEYİMİZ VAR | Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - Bazı Şeyler Biraz Güzel Olabilir | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - Köpek Balığı | Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">camduvar - karanlık manifesto | Recording</a></div>
+                            <div class="track-item"><a href="#" target="_blank">camduvar - akvaryum | Recording</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - 1 Kişi | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/6JHAikljHpzQznzs1KV2GE?si=f833e1a511d942b1" target="_blank">Gece Üç Gibi - İçerim Yana Yana | Producing, Recording</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - gitmek | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Laki - Civar | Producing, Recording</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/3Iavi0SS7f3e1foQ2wCWs4?si=3w4P6B3qRzCGo70x0uOLLw" target="_blank">Koza - Beni Şeytanlarla Bırak Git | Composing, Producing, Recording, Mixing, Mastering</a></div>
+                        </div>
+                        <div class="year-group"><h3 class="year-title">2022</h3>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/0JmrYfiDKNegsizodo1N1v?si=08826dc62f1944e8" target="_blank">Fakala - Denge | Composing, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/0T8dJzrSgpOF1sG5AXnJEh?si=la4d4jJZQEarctyMXitDsg" target="_blank">Fakala - Enteresantel (Album) | Composing, Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/26JrOvZaeTKI3eS6coL2oH?si=oASS8QqsS3aSmkzzh0avSQ" target="_blank">Fakala - Yanımda Ol | Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/2ITIZH1glGLjq9VXjwSADl?si=faa4aa9c9b8b4ce3" target="_blank">Fakala - AMA BEN SİKTİR ETMEK İSTEMİYORUMM!! | Composing, Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Valh - Mezarlıkta Dans | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/6JYt34qIzhDwvnnjMSOqwk?si=ki8g9QgYSCuHGbBoTifBHQ" target="_blank">Gece Üç Gibi - Sen Yanımda Olmayınca | Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Emre Güneş - ZHRCNVR | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - Kafasına Göre | Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Valh - WERTHER | Producing, Recording</a></div>
+                            <div class="track-item"><a href="http://www.youtube.com/watch?v=GGa5CcAc-Yo" target="_blank">Doğaç Müzik (Araftafaray) - Rap Freestyle Gecesi | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - Yorgun Gözler Ve Yanlış Kararlar | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - Parası Olan Herkesten Nefret Ediyorum | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/5InHaOkm1AaZrnLsfIk0Hr?si=dc5457bec8544e4d" target="_blank">Koza - Benim Minik Hitler | Recording, Mastering</a></div>
+                        </div>
+                        <div class="year-group"><h3 class="year-title">2021</h3>
+                            <div class="track-item"><a href="#" target="_blank">Ekin - Tanrıya Şükran | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Tuhesdi - Bedel | Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Tuhesdi - Meçhul | Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Scarlet Hawk - Negro | Recording</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/5QCHk01q3CoFJPPoSfTqMu?si=78ce83f9626143ff" target="_blank">Emre Güneş - Oluru Yok | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/5GIeHlK396M4OntMTpNEQc?si=70f3862b8acc454e" target="_blank">Felfecir - Yıldızlara Fısılda | Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Emirhan Çakmak - Sorunun Her Tonu | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/3nsMz3fDwYDdoaw6Z5USeo?si=pdoprJs-TMq6xgQPWChQxg" target="_blank">Emre Güneş - Harbiden | Composed, Producing, Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Young Leria - Beni Anla | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - Çıplak | Mixing, Mastering</a></div>
+                        </div>
+                        <div class="year-group"><h3 class="year-title">2020</h3>
+                            <div class="track-item"><a href="#" target="_blank">Evrensel - Naptın | Recording Assistant, Audio Editing</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Şehinşah - Pirana | Recording Assistant, Audio Editing</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - Yoksun | Recording Assistant, Audio Editing</a></div>
+                            <div class="track-item"><a href="#" target="_blank">The Wanderer - Artık Sonsuz Oldun | Recording Assistant, Audio Editing</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Rookie312 X Mert Ekin - Canavar | Recording Assistant, Audio Editing</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Hyper & Rexor - Ruh | Recording Assistant, Audio Editing</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Z-YA&Beks ft. Melt - Kaybettin | Recording Assistant, Audio Editing</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Bero - Panik Yok | Recording Assistant, Audio Editing</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Sao - Tek Yol Yok | Recording Assistant, Audio Editing</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Emirhan Çakmak - Sonu yok | Recording, Mixing</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Çağker - Hislerime Dokunma | Recording, Mixing, Mastering</a></div>
+                            <div class="track-item"><a href="#" target="_blank">Valh - Lanet | Recording, Mixing, Mastering</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-column sticky-image">
+                    <img src="fakala_in_studio.jpg" alt="Fakala Studio Analog" class="analog-photo rotate-right">
+                </div>
+            </div>
+        </section>
+
+        <section id="livesound" class="page-section content-wrapper">
+            <h2>LIVE SOUND</h2>
+            <p class="live-sound-intro">Worked in live sound for these musicians/bands at least once</p>
+            <div class="live-sound-list">
+                <span>Mustafa Özarslan</span>
+                <span>Caner Gülsüm</span>
+                <span>Cankat Erdoğan</span>
+                <span>Fethi Ahmet Fırat</span>
+                <span>Müslüm & Mustafa Eke</span>
+                <span>Özcan Türe</span>
+                <span>Yıldırım Budak</span>
+                <span>Ayşen Kaya</span>
+                <span>Erdal Beyazgül</span>
+                <span>IrmakCa</span>
+                <span>Pandami</span>
+                <span>Cürüm Records</span>
+                <span>Yung Ouzo</span>
+                <span>Majör</span>
+                <span>Panik Yok!</span>
+                <span>5ilikon</span>
+                <span>Maria Petra</span>
+                <span>MESAİ Band</span>
+                <span>FLASTER</span>
+                <span>Mor Art Collective</span>
+                <span>Ankara Pis Tones</span>
+                <span>Bora Biçer</span>
+                <span>Kerem Akın</span>
+                <span>Gökhan Namlı</span>
+                <span>Duygu Kutlu</span>
+                <span>Deniz Efe Kahraman</span>
+                <span>Tuğba Tufantepe</span>
+                <span>Balos Banda</span>
+                <span>Haktan</span>
+                <span>Dümenden</span>
+                <span>De Lejos</span>
+                <span>Grotesque Ceremonium</span>
+                <span>Nex Carnis</span>
+                <span>Cannon Fodder</span>
+                <span>Özgür Alter</span>
+                <span>Derya Bedavacı</span>
+                <span>Reenkarne</span>
+                <span>Melek Nur</span>
+                <span>Cevdet Bağca</span>
+                <span>Arsuz Band</span>
+                <span>Mert Yaşar Cengiz</span>
+            </div>
+        </section>
+
+        <section id="instrumentalist" class="page-section content-wrapper">
+            <h2>FAKALA AS AN INSTRUMENTALIST</h2>
+            <div class="studio-list">
+                <div class="year-group"><h3 class="year-title">2025</h3>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/1TOKgLrtR90JuODeyRGIt1?si=02a3049f52174272" target="_blank">Emre Güneş - Yalan | Bass Guitar, Electric Guitar, Keyboards</a></div>
+                    <div class="track-item"><a href="https://www.youtube.com/watch?v=ixgzt-IopVY&list=OLAK5uy_nGI2eXduzC5lcC-zePL3VWLlA19XGu_No" target="_blank">Emre Güneş - Yavaştan Sıyrıl | Bass Guitar, Electric Guitar, Synthesizers</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/4CjwuErkI0GbwN9WwX9VrE?si=9092ce1608f54d91" target="_blank">Emre Güneş - Her Şey Çok Sessiz | Bass Guitar, Electric Guitar, Keyboards, Synthesizers</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/30G487P0WpDiMdxcK4d16E?si=-VmJynU_T7STNzcgYm0Lhw" target="_blank">Fakala - Sagas Of Lumin 2 original Soundtracks | Guitars, Percussions, Synthesizers</a></div>
+                    <div class="track-item"><a href="#" target="_blank">Mert Ersoy - Geçmişte Bir Yerde Bıraktım | Bass Guitar, Electric Guitar</a></div>
+                    <div class="track-item"><a href="#" target="_blank">Fuyki - Mutsuz İnsanlar Kenti | Bass Guitar, Electric Guitar</a></div>
+                    <div class="track-item"><a href="#" target="_blank">Çağrı Sinci - ??? | Synthesizers</a></div>
+                    <div class="track-item"><a href="#" target="_blank">Koza - Hoşçakal | Bass Guitar, Electric Guitar, Keyboards, Synthesizers</a></div>
+                </div>
+                <div class="year-group"><h3 class="year-title">2024</h3>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/3vQaNGub0VOpXC6fB0JBQ7?si=-TS1YCMGSOWLtwE5PjxPPg" target="_blank">Emre Güneş - TUTUZAK | Synthesizers</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/5quIEFDdv0dSs7tiAtQ7Av?si=d3d219a78889438a" target="_blank">Fakala - Tinnitus | Vocal, Bass Guitar, Electric Guitar, Keyboards</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/6bogtpORBoF1BX7Szvd87H?si=95d408181ce74ac3" target="_blank">Fakala - Gözlerini Kapat ve Sus | Vocals, Bass Guitar, Acoustic Guitar</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/45fqKG6l2Cb9wbaNv8jFAu?si=UfDKi_ALQciAm9-yUyovrw" target="_blank">Fakala - Karanlık Sancıyı Aydınlatıyor (Album) | Vocals, Bass Guitars, Electric Guitars, Acoustic Guitars, Synthesizers</a></div>
+                </div>
+                <div class="year-group"><h3 class="year-title">2023</h3>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/4txzxioS9KodLQIQUc70UT?si=TA9M1St-R92JdDKGVEf89Q" target="_blank">Fakala - Hayat Boktan | Vocal, Acoustic Guitar</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/6JHAikljHpzQznzs1KV2GE?si=f833e1a511d942b1" target="_blank">Gece Üç Gibi - İçerim Yana Yana | Bass Guitar</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/3Iavi0SS7f3e1foQ2wCWs4?si=3w4P6B3qRzCGo70x0uOLLw" target="_blank">Koza - Beni Şeytanlarla Bırak Git | Bass Guitar, Acoustic Guitar</a></div>
+                </div>
+                <div class="year-group"><h3 class="year-title">2022</h3>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/0JmrYfiDKNegsizodo1N1v?si=08826dc62f1944e8" target="_blank">Fakala - Denge | Vocal, Percussions</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/0T8dJzrSgpOF1sG5AXnJEh?si=la4d4jJZQEarctyMXitDsg" target="_blank">Fakala - Enteresantel (Album) | Vocals, Bass Guitars, Electric Guitars, Acoustic Guitars, Synthesizers, Percussions</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/26JrOvZaeTKI3eS6coL2oH?si=oASS8QqsS3aSmkzzh0avSQ" target="_blank">Fakala - Yanımda Ol | Vocal, Bass Guitar, Percissions</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/2ITIZH1glGLjq9VXjwSADl?si=faa4aa9c9b8b4ce3" target="_blank">Fakala - AMA BEN SİKTİR ETMEK İSTEMİYORUMM!! | Vocals, Bass Guitar, Electric Guitar, Acoustic Guitar, Keyboards</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/6JYt34qIzhDwvnnjMSOqwk?si=ki8g9QgYSCuHGbBoTifBHQ" target="_blank">Gece Üç Gibi - Sen Yanımda Olmayınca | Bass Guitar</a></div>
+                    <div class="track-item"><a href="http://www.youtube.com/watch?v=GGa5CcAc-Yo" target="_blank">Doğaç Müzik (Araftafaray) - Rap Freestyle Gecesi | Bass Guitar</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/5InHaOkm1AaZrnLsfIk0Hr?si=dc5457bec8544e4d" target="_blank">Koza - Benim Minik Hitler | Bass Guitar</a></div>
+                </div>
+                <div class="year-group"><h3 class="year-title">2021</h3>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/5QCHk01q3CoFJPPoSfTqMu?si=78ce83f9626143ff" target="_blank">Emre Güneş - Oluru Yok | Electric Guitar</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/5GIeHlK396M4OntMTpNEQc?si=70f3862b8acc454e" target="_blank">Felfecir - Yıldızlara Fısılda | Bass Guitar, Electric Guitar</a></div>
+                    <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/3nsMz3fDwYDdoaw6Z5USeo?si=pdoprJs-TMq6xgQPWChQxg" target="_blank">Emre Güneş - Harbiden | Bass Guitar, Electric Guitar, Acoustic Guitar</a></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="composer" class="page-section content-wrapper">
+            <h2>FAKALA AS A COMPOSER</h2>
+            <div class="split-layout">
+                <div class="text-column">
+                    <div class="studio-list">
+                        <div class="year-group"><h3 class="year-title">2025</h3>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/30G487P0WpDiMdxcK4d16E?si=-VmJynU_T7STNzcgYm0Lhw" target="_blank">Fakala - Sagas Of Lumin 2 original Soundtracks</a></div>
+                        </div>
+                        <div class="year-group"><h3 class="year-title">2024</h3>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/3vQaNGub0VOpXC6fB0JBQ7?si=-TS1YCMGSOWLtwE5PjxPPg" target="_blank">Emre Güneş - TUTUZAK</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/5quIEFDdv0dSs7tiAtQ7Av?si=d3d219a78889438a" target="_blank">Fakala - Tinnitus</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/6bogtpORBoF1BX7Szvd87H?si=95d408181ce74ac3" target="_blank">Fakala - Gözlerini Kapat ve Sus</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/45fqKG6l2Cb9wbaNv8jFAu?si=UfDKi_ALQciAm9-yUyovrw" target="_blank">Fakala - Karanlık Sancıyı Aydınlatıyor (Album)</a></div>
+                        </div>
+                        <div class="year-group"><h3 class="year-title">2023</h3>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/4txzxioS9KodLQIQUc70UT?si=TA9M1St-R92JdDKGVEf89Q" target="_blank">Fakala - Hayat Boktan</a></div>
+                        </div>
+                        <div class="year-group"><h3 class="year-title">2022</h3>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/0JmrYfiDKNegsizodo1N1v?si=08826dc62f1944e8" target="_blank">Fakala - Denge</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/0T8dJzrSgpOF1sG5AXnJEh?si=la4d4jJZQEarctyMXitDsg" target="_blank">Fakala - Enteresantel (Album)</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/26JrOvZaeTKI3eS6coL2oH?si=oASS8QqsS3aSmkzzh0avSQ" target="_blank">Fakala - Yanımda Ol</a></div>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/2ITIZH1glGLjq9VXjwSADl?si=faa4aa9c9b8b4ce3" target="_blank">Fakala - AMA BEN SİKTİR ETMEK İSTEMİYORUMM!!</a></div>
+                        </div>
+                        <div class="year-group"><h3 class="year-title">2021</h3>
+                            <div class="track-item"><a href="https://open.spotify.com/intl-tr/album/3nsMz3fDwYDdoaw6Z5USeo?si=pdoprJs-TMq6xgQPWChQxg" target="_blank">Emre Güneş - Harbiden</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-column sticky-image">
+                    <img src="Fakala_as_a_composer.jpg" alt="Fakala Composer Analog" class="analog-photo rotate-left">
+                </div>
+            </div>
+        </section>
+
+        <section id="hikaye" class="page-section content-wrapper">
+            <h2>THE HIKAYE PROJECT</h2>
+            <div class="text-content">
+                <p style="text-align: center; font-size: 1.5rem; color: #888;">Work in progress...</p>
+            </div>
+        </section>
+
+        <section id="dogac" class="page-section content-wrapper">
+            <h2>DOĞAÇ MÜZİK</h2>
+            
+            <div style="text-align:center; margin-bottom: 40px;">
+                <a href="https://www.instagram.com/dogacmuzik/" target="_blank" class="follow-me-btn">
+                    VISIT DOĞAÇ MÜZİK INSTAGRAM
+                </a>
+            </div>
+
+            <div class="video-grid">
+                <div class="video-item">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/XENee7uLxf4?si=0GhBc3ZTMcRmSNCq" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="video-item">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/GGa5CcAc-Yo?si=b6uuO_4TCQUNtanz" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="page-section content-wrapper">
+            <h2>CONTACT</h2>
+            <div class="contact-list">
+                <a href="mailto:faklrecords@gmail.com" class="contact-link">faklrecords@gmail.com</a>
+                <a href="https://www.instagram.com/prodbyfakala/" target="_blank" class="contact-link">instagram.com/prodbyfakala</a>
+                <a href="https://share.google/QCjQ4118BBUANS0Iu" target="_blank" class="contact-link">Location / Share</a>
+            </div>
+        </section>
+
+    </main>
+
+    <script async src="https://www.instagram.com/embed.js"></script>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.querySelector('.menu-toggle').classList.toggle('open');
+        }
+
+        // Gelişmiş Submenu Toggle
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(id);
+            // Diğer açık menüleri kapat
+            document.querySelectorAll('.submenu').forEach(el => {
+                if(el.id !== id) el.style.display = 'none';
+            });
+            
+            submenu.style.display = (submenu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function goTo(id) {
+            const currentActive = document.querySelector('.page-section.active');
+            if(currentActive) {
+                currentActive.style.opacity = '0';
+                setTimeout(() => {
+                    currentActive.classList.remove('active');
+                    
+                    const target = document.getElementById(id);
+                    if (target) {
+                        target.classList.add('active');
+                        setTimeout(() => {
+                            target.style.opacity = '1';
+                        }, 50);
+                    }
+                }, 300); 
+            } else {
+                const target = document.getElementById(id);
+                target.classList.add('active');
+                setTimeout(() => target.style.opacity = '1', 50);
+            }
+
+            toggleMenu();
+            window.scrollTo(0, 0);
+        }
+
+        window.onload = function() {
+            const home = document.getElementById('home');
+            if(home) {
+                home.classList.add('active');
+                setTimeout(() => home.style.opacity = '1', 50);
+            }
+        }
+    </script>
+</body>
+</html>
